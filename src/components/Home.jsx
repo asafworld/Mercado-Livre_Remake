@@ -9,6 +9,7 @@ class Home extends React.Component {
             <input
               type="text"
               id="search-input"
+              placeholder="Pesquisar"
             />
           </label>
         </form>
