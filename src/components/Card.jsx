@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class Card extends Component {
   render() {
-    const { item: { title, thumbnail, price } } = this.props;
+    const { item: { title, thumbnail, price, id } } = this.props;
     return (
-      <section
-        data-testid="product"
-      >
-        <p>{ title }</p>
-        <img src={ thumbnail } alt={ title } />
-        <p>{ price }</p>
-      </section>
+      <Link to={ `/productDetail/${id}` } data-testid="product-detail-link">
+        <section
+          data-testid="product"
+        >
+          <p data-testid="product-detail-name">{ title }</p>
+          <img src={ thumbnail } alt={ title } />
+          <p>{ price }</p>
+        </section>
+      </Link>
     );
   }
 }
