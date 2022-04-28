@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './Header.css';
 
 class Header extends Component {
   componentDidMount() {
@@ -12,10 +13,15 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <p>0</p>
-        <Link to="/cart" data-testid="shopping-cart-button">
-          Cart
-        </Link>
+        <nav className="link-cart-container">
+          <Link
+            to="/cart"
+            data-testid="shopping-cart-button"
+          >
+            <i className="fa-solid fa-cart-shopping" />
+          </Link>
+          <span className="counter-items">0</span>
+        </nav>
       </header>
     );
   }
