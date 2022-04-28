@@ -7,29 +7,110 @@ class Cart extends Component {
     this.state = {
       addedId: [],
       products: [],
+      orderedProducts: [],
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const itemsId = localStorage.getItem('addedProductsIds');
     const ids = JSON.parse(itemsId);
-    this.setState({ addedId: ids });
-    console.log(ids);
-    ids.forEach((e) => {
-      this.getProducts(e.id);
-    });
+    const fetched = [];
+    if (ids !== null) {
+      await this.setState({ addedId: ids });
+      await ids.forEach(async (e) => {
+        const eachProd = await this.getProducts(e.id);
+        await fetched.push(eachProd);
+        const now = this.getInOrder(ids, fetched);
+        this.setState({ orderedProducts: now });
+      });
+    }
   }
 
   getProducts = async (e) => {
     const request = await fetch(`https://api.mercadolibre.com/items/${e}`);
     const response = await request.json();
-    console.log(response);
-    this.setState((prev) => ({ products: [...prev.products, response] }));
+    return response;
+  }
+
+  getInOrder = (ids, products) => {
+    console.log(ids, products);
+    const array = [];
+    console.log(ids);
+    console.log(products);
+    ids.forEach((item) => {
+      const theOne = products.find((prod) => prod.id === item.id);
+      console.log(theOne);
+      array.push(theOne);
+    });
+    return array;
+  }
+
+  getQntd = (id) => {
+    const { addedId } = this.state;
+    const item = addedId.find((e) => e.id === id);
+    return item.qntd;
+  }
+
+  plusOne = (id) => {
+    const items = localStorage.getItem('addedProductsIds');
+    const array = JSON.parse(items);
+    const equalId = array.filter((item) => item.id === id);
+    if (equalId.length > 0) {
+      array.forEach((item, index) => {
+        if (item.id === id) {
+          const { qntd } = item;
+          array[index].qntd = (qntd + 1);
+        }
+      });
+      localStorage.setItem('addedProductsIds', JSON.stringify(array));
+      this.setState({ addedId: array });
+    }
+  }
+
+  minusOne = (id) => {
+    const items = localStorage.getItem('addedProductsIds');
+    const array = JSON.parse(items);
+    const equalId = array.filter((item) => item.id === id);
+    if (equalId.length > 0) {
+      console.log('exist');
+      array.forEach((item, index) => {
+        if (item.id === id) {
+          const { qntd } = item;
+          array[index].qntd = (qntd - 1);
+          if (qntd > 1) {
+            localStorage.setItem('addedProductsIds', JSON.stringify(array));
+            this.setState({ addedId: array });
+          }
+        }
+      });
+    }
+  }
+
+  removeItem = (id) => {
+    const { orderedProducts } = this.state;
+    const items = localStorage.getItem('addedProductsIds');
+    const array = JSON.parse(items);
+    const differentId = array.filter((item) => item.id !== id);
+    const newProducts = orderedProducts.filter((element) => element.id !== id);
+    localStorage.setItem('addedProductsIds', JSON.stringify(differentId));
+    this.setState({
+      addedId: differentId,
+      products: newProducts,
+      orderedProducts: newProducts });
+  }
+
+  existUndefined = (array) => {
+    const exist = array.some((e) => e === undefined);
+    return exist;
   }
 
   render() {
-    const { addedId, products } = this.state;
+    const { addedId, products, orderedProducts } = this.state;
+    console.log(this.existUndefined(orderedProducts));
+    console.log(orderedProducts);
     console.log(products);
+    const items = localStorage.getItem('addedProductsIds');
+    const array = JSON.parse(items);
     return (
       <>
         <header>
@@ -37,19 +118,52 @@ class Cart extends Component {
             Home
           </Link>
         </header>
-        { addedId.length === 0
-          ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p> : (
-            products.map((prod, index) => (
-              <div key={ index }>
-                <p data-testid="shopping-cart-product-name">{ prod.title }</p>
-                <img src={ prod.thumbnail } alt={ prod.title } />
-                <p>{ prod.price }</p>
-                <p data-testid="shopping-cart-product-quantity">
-                  { addedId[index].qntd }
-                </p>
-              </div>
-            ))
+
+        { array.length > 0
+          && orderedProducts.length === addedId.length
+          && !this.existUndefined(orderedProducts)
+          // && products.length > 0
+          ? (
+            <section>
+              {orderedProducts.map((prod, index) => (
+                <div key={ index }>
+                  <button
+                    type="button"
+                    onClick={ () => this.removeItem(prod.id) }
+                  >
+                    x
+                  </button>
+                  <img src={ prod.thumbnail } alt={ prod.title } />
+                  <p data-testid="shopping-cart-product-name">{ prod.title }</p>
+                  <button
+                    type="button"
+                    onClick={ () => this.minusOne(prod.id) }
+                    data-testid="product-decrease-quantity"
+                  >
+                    -
+                    <p data-testid="shopping-cart-product-quantity">
+                      { this.getQntd(prod.id) }
+                    </p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={ () => this.plusOne(prod.id) }
+                    data-testid="product-increase-quantity"
+                  >
+                    +
+                  </button>
+                  <p>{ prod.price * this.getQntd(prod.id) }</p>
+                </div>))}
+            </section>
+          )
+          : (
+            <p
+              data-testid="shopping-cart-empty-message"
+            >
+              Seu carrinho está vazio
+            </p>
           ) }
+        <button type="button">Finalizar a compra</button>
       </>
     );
   }
