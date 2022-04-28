@@ -1,0 +1,16 @@
+.link-cart-container {
+  padding: 10px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.counter-items {
+  position: absolute;
+  transform: translateX(5px) translateY(-5px);
+}
+
+.fa-cart-shopping {
+  font-size: 1.3em;
+}
