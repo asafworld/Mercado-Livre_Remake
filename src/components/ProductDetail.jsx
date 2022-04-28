@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from './Card';
 import Header from './Header';
 
 class ProductDetail extends React.Component {
@@ -10,10 +9,31 @@ class ProductDetail extends React.Component {
       productInfo: {},
       attributes: [],
     };
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
     this.getTheProduct();
+  }
+
+  addToCart = (id) => {
+    const items = localStorage.getItem('addedProductsIds');
+    let array = JSON.parse(items);
+    const equalId = array.filter((item) => item.id === id);
+    if (equalId.length > 0) {
+      console.log('exist');
+      const newArray = array.find((item) => item.id === id);
+      array = array.filter((item) => item.id !== id);
+      localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
+        id,
+        qntd: newArray.qntd + 1,
+      }]));
+    } else {
+      localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
+        id,
+        qntd: 1,
+      }]));
+    }
   }
 
   getTheProduct = async () => {
@@ -33,10 +53,21 @@ class ProductDetail extends React.Component {
     return (
       <section>
         <Header />
-        <Card item={ productInfo } />
+        <div key={ productInfo.title }>
+          <p data-testid="product-detail-name">{ productInfo.title }</p>
+          <img src={ productInfo.thumbnail } alt={ productInfo.name } />
+          <p>{ productInfo.price }</p>
+        </div>
         { attributes.map((att, index) => (
-          <p key={ index }>{ `${att.name}: ${att.value_name}` }</p>
+          <p key={ index }>{ `${att.name}:: ${att.value_name}` }</p>
         )) }
+        <button
+          type="button"
+          onClick={ () => this.addToCart(productInfo.id) }
+          data-testid="product-detail-add-to-cart"
+        >
+          <i className="fa-solid fa-cart-plus" />
+        </button>
       </section>
     );
   }

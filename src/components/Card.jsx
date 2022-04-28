@@ -48,7 +48,7 @@ class Card extends Component {
           data-testid="product-add-to-cart"
           onClick={ () => this.addToCart(id) }
         >
-          Add to cart
+          <i className="fa-solid fa-cart-plus" />
         </button>
       </article>
     );
