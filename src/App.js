@@ -2,8 +2,9 @@ import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Home from './components/Home';
 import Cart from './components/Cart';
-import './App.css';
 import ProductDetail from './components/ProductDetail';
+import Checkout from './components/Checkout';
+import './App.css';
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
           <Cart />
         </Route>
         <Route exact path="/ProductDetail/:id" component={ ProductDetail } />
+        <Route exact path="/checkout">
+          <Checkout />
+        </Route>
       </Switch>
     </BrowserRouter>
   );
