@@ -10,7 +10,7 @@ class Card extends Component {
     }
   }
 
-  addToCart = (id) => {
+  addToCart = (id, itemProp) => {
     const items = localStorage.getItem('addedProductsIds');
     const array = JSON.parse(items);
     const equalId = array.filter((item) => item.id === id);
@@ -28,18 +28,13 @@ class Card extends Component {
       localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
         id,
         qntd: 1,
+        obj: itemProp,
       }]));
     }
   }
 
-  // let newQntd;
-  // const newArr = array.map((item) => {
-  //   if(item.id === id) {
-  //     newQntd = item.qntd +1
-  //   }
-  // })
-
   render() {
+    const { item } = this.props;
     const { item: { title, thumbnail, price, id } } = this.props;
     return (
       <article>
@@ -55,7 +50,7 @@ class Card extends Component {
         <button
           type="button"
           data-testid="product-add-to-cart"
-          onClick={ () => this.addToCart(id) }
+          onClick={ () => this.addToCart(id, item) }
         >
           Add to cart
         </button>
