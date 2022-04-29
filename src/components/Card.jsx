@@ -10,27 +10,31 @@ class Card extends Component {
     }
   }
 
-  addToCart = (id) => {
+  addToCart = (id, itemProp) => {
     const items = localStorage.getItem('addedProductsIds');
-    let array = JSON.parse(items);
+    const array = JSON.parse(items);
     const equalId = array.filter((item) => item.id === id);
     if (equalId.length > 0) {
       console.log('exist');
-      const newArray = array.find((item) => item.id === id);
-      array = array.filter((item) => item.id !== id);
-      localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
-        id,
-        qntd: newArray.qntd + 1,
-      }]));
+      array.forEach((item, index) => {
+        if (item.id === id) {
+          const { qntd } = item;
+          array[index].qntd = (qntd + 1);
+        }
+      });
+      console.log(array);
+      localStorage.setItem('addedProductsIds', JSON.stringify(array));
     } else {
       localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
         id,
         qntd: 1,
+        obj: itemProp,
       }]));
     }
   }
 
   render() {
+    const { item } = this.props;
     const { item: { title, thumbnail, price, id } } = this.props;
     return (
       <article>
@@ -46,9 +50,9 @@ class Card extends Component {
         <button
           type="button"
           data-testid="product-add-to-cart"
-          onClick={ () => this.addToCart(id) }
+          onClick={ () => this.addToCart(id, item) }
         >
-          <i className="fa-solid fa-cart-plus" />
+          Add to cart
         </button>
       </article>
     );

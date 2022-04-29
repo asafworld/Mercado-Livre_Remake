@@ -16,22 +16,25 @@ class ProductDetail extends React.Component {
     this.getTheProduct();
   }
 
-  addToCart = (id) => {
+  addToCart = (id, itemProp) => {
     const items = localStorage.getItem('addedProductsIds');
-    let array = JSON.parse(items);
+    const array = JSON.parse(items);
     const equalId = array.filter((item) => item.id === id);
     if (equalId.length > 0) {
       console.log('exist');
-      const newArray = array.find((item) => item.id === id);
-      array = array.filter((item) => item.id !== id);
-      localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
-        id,
-        qntd: newArray.qntd + 1,
-      }]));
+      array.forEach((item, index) => {
+        if (item.id === id) {
+          const { qntd } = item;
+          array[index].qntd = (qntd + 1);
+        }
+      });
+      console.log(array);
+      localStorage.setItem('addedProductsIds', JSON.stringify(array));
     } else {
       localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
         id,
         qntd: 1,
+        obj: itemProp,
       }]));
     }
   }
@@ -63,7 +66,7 @@ class ProductDetail extends React.Component {
         )) }
         <button
           type="button"
-          onClick={ () => this.addToCart(productInfo.id) }
+          onClick={ () => this.addToCart(productInfo.id, productInfo) }
           data-testid="product-detail-add-to-cart"
         >
           <i className="fa-solid fa-cart-plus" />
