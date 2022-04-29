@@ -15,7 +15,7 @@ class Cart extends Component {
     const itemsId = localStorage.getItem('addedProductsIds');
     const ids = JSON.parse(itemsId);
     const finalProd = [];
-    await this.setState({ addedId: ids });
+    this.setState({ addedId: ids });
     await ids.forEach(async (e) => {
       finalProd.push(e.obj);
     });
@@ -135,7 +135,9 @@ class Cart extends Component {
               Seu carrinho está vazio
             </p>
           ) }
-        <button type="button">Finalizar a compra</button>
+        <Link to="/checkout" data-testid="checkout-products">
+          Finalizar Compra
+        </Link>
       </>
     );
   }

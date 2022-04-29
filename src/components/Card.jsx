@@ -3,13 +3,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class Card extends Component {
-  componentDidMount() {
-    if (localStorage.getItem('addedProductsIds') === null) {
-      const array = JSON.stringify([]);
-      localStorage.setItem('addedProductsIds', array);
-    }
-  }
-
   addToCart = (id, itemProp) => {
     const items = localStorage.getItem('addedProductsIds');
     const array = JSON.parse(items);
@@ -37,7 +30,7 @@ class Card extends Component {
     const { item } = this.props;
     const { item: { title, thumbnail, price, id } } = this.props;
     return (
-      <article>
+      <section>
         <Link to={ `/productDetail/${id}` } data-testid="product-detail-link">
           <section
             data-testid="product"
@@ -54,7 +47,7 @@ class Card extends Component {
         >
           Add to cart
         </button>
-      </article>
+      </section>
     );
   }
 }

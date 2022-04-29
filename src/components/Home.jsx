@@ -1,7 +1,7 @@
 import React from 'react';
 import Category from './Category';
 import Header from './Header';
-import Input from './Input';
+import InputProducts from './InputProducts';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import Card from './Card';
 
@@ -13,6 +13,13 @@ class Home extends React.Component {
       product: '',
       results: [],
     };
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem('addedProductsIds') === null) {
+      const array = JSON.stringify([]);
+      localStorage.setItem('addedProductsIds', array);
+    }
   }
 
   onSearch = async () => {
@@ -46,7 +53,7 @@ class Home extends React.Component {
             onCategoryChange={ this.onCategoryChange }
             onChange={ this.onChange }
           />
-          <Input
+          <InputProducts
             onChange={ this.onChange }
             onSearch={ this.onSearch }
           />
