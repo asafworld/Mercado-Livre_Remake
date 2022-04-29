@@ -16,7 +16,7 @@ class ProductDetail extends React.Component {
     this.getTheProduct();
   }
 
-  addToCart = (id) => {
+  addToCart = (id, itemProp) => {
     const items = localStorage.getItem('addedProductsIds');
     const array = JSON.parse(items);
     const equalId = array.filter((item) => item.id === id);
@@ -34,6 +34,7 @@ class ProductDetail extends React.Component {
       localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
         id,
         qntd: 1,
+        obj: itemProp,
       }]));
     }
   }
@@ -65,7 +66,7 @@ class ProductDetail extends React.Component {
         )) }
         <button
           type="button"
-          onClick={ () => this.addToCart(productInfo.id) }
+          onClick={ () => this.addToCart(productInfo.id, productInfo) }
           data-testid="product-detail-add-to-cart"
         >
           <i className="fa-solid fa-cart-plus" />

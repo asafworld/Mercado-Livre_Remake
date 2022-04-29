@@ -14,35 +14,12 @@ class Cart extends Component {
   componentDidMount = async () => {
     const itemsId = localStorage.getItem('addedProductsIds');
     const ids = JSON.parse(itemsId);
-    const fetched = [];
-    if (ids !== null) {
-      await this.setState({ addedId: ids });
-      await ids.forEach(async (e) => {
-        const eachProd = await this.getProducts(e.id);
-        await fetched.push(eachProd);
-        const now = this.getInOrder(ids, fetched);
-        this.setState({ orderedProducts: now });
-      });
-    }
-  }
-
-  getProducts = async (e) => {
-    const request = await fetch(`https://api.mercadolibre.com/items/${e}`);
-    const response = await request.json();
-    return response;
-  }
-
-  getInOrder = (ids, products) => {
-    console.log(ids, products);
-    const array = [];
-    console.log(ids);
-    console.log(products);
-    ids.forEach((item) => {
-      const theOne = products.find((prod) => prod.id === item.id);
-      console.log(theOne);
-      array.push(theOne);
+    const finalProd = [];
+    await this.setState({ addedId: ids });
+    await ids.forEach(async (e) => {
+      finalProd.push(e.obj);
     });
-    return array;
+    this.setState({ orderedProducts: finalProd });
   }
 
   getQntd = (id) => {
@@ -106,11 +83,8 @@ class Cart extends Component {
 
   render() {
     const { addedId, products, orderedProducts } = this.state;
-    console.log(this.existUndefined(orderedProducts));
-    console.log(orderedProducts);
     console.log(products);
-    const items = localStorage.getItem('addedProductsIds');
-    const array = JSON.parse(items);
+    console.log(orderedProducts);
     return (
       <>
         <header>
@@ -118,11 +92,9 @@ class Cart extends Component {
             Home
           </Link>
         </header>
-
-        { array.length > 0
+        { orderedProducts.length > 0
           && orderedProducts.length === addedId.length
           && !this.existUndefined(orderedProducts)
-          // && products.length > 0
           ? (
             <section>
               {orderedProducts.map((prod, index) => (
