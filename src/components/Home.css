@@ -37,6 +37,17 @@
   }
 }
 
+@keyframes selected {
+
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
 .search label {
   cursor: pointer;
   padding: 5px;
@@ -49,13 +60,15 @@
 .category + span {
   color: rgb(68, 68, 68);
   font-size: 0.8em;
+  font-weight: 100;
   padding: 5px 10px;
 }
 
 .category:checked + span {
+  animation: selected 0.5s;
   border-radius: 25px;
   color: black;
-  font-weight: 900;
+  font-weight: 500;
 }
 
 main {
@@ -70,17 +83,21 @@ main {
   width: 65%;
 }
 
-.card {
+.card-container {
+  align-items: center;
   animation: bottom 1s;
-  background-color: rgb(238, 238, 238);
-  box-shadow: 2px 2px 5px rgb(206, 206, 206);
+  background-color: rgb(253, 253, 253);
+  border-top: 1px solid silver;
   display: flex;
-  flex-direction: column;
-  height: 280px;
   justify-content: space-between;
   margin: 10px;
   padding: 10px;
-  width: 180px;
+  width: 85%;
+}
+
+.card {
+  display: flex;
+  width: 100%;
 }
 
 .bottom-header {
@@ -132,7 +149,7 @@ main {
 }
 
 .query-button {
-  background-color: whitesmoke;
+  background-color: transparent;
   border: 0;
   border-bottom-right-radius: 50px;
   border-top-right-radius: 50px;
@@ -156,21 +173,24 @@ main {
 .img-card {
   height: 130px;
   object-fit: cover;
-  width: 100%;
+  padding: 10px;
+  width: 130px;
 }
 
 .product-info {
   height: 100%;
+  padding: 0 10px;
+  width: 100%;
 }
 
 .add-to-cart {
-  background-color: rgb(255, 241, 89);
+  background-color: transparent;
   border: 0;
-  border-radius: 25px;
-  color: rgb(194, 151, 32);
+  color: rgb(52, 131, 250);
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1.5em;
   padding: 5px;
+  transform: translateY(70px);
 }
 
 .add-to-cart:hover {
@@ -178,36 +198,34 @@ main {
 }
 
 .add-to-cart:disabled {
-  background-color: rgb(218, 218, 218);
-  color: rgb(156, 156, 156);
+  color: rgb(219, 219, 219);
   cursor: not-allowed;
 }
 
 .free {
-  background-color: white;
-  color: rgb(67, 201, 67);
+  color: rgb(0, 166, 80);
   font-size: 0.8em;
-  padding: 2px 5px;
-  position: absolute;
-  transform: translateY(-22px);
-  width: 150px;
+  padding: 10px 0;
 }
 
 .name-card {
-  font-weight: 500;
+  color: black;
+  font-size: 1em;
+  font-weight: 100;
+  height: 48px;
   overflow: hidden;
   padding: 10px 0;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.name-card, .stock-card {
+.stock-card {
   color: black;
   font-size: 0.8em;
+  font-weight: 100;
 }
 
 .price-card {
-  color: rgb(217, 221, 0);
+  color: black;
   font-size: 1em;
   padding: 5px 0;
 }

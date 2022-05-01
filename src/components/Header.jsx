@@ -18,7 +18,7 @@ class Header extends Component {
             to="/cart"
             data-testid="shopping-cart-button"
           >
-            <i className="fa-solid fa-cart-shopping" />
+            <i className="las la-shopping-cart" />
             <span
               className="counter-items"
               data-testid="shopping-cart-size"

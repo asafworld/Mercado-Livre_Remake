@@ -27,11 +27,11 @@ a {
   font-weight: 500;
   padding: 2px 5px;
   position: absolute;
-  transform: translateX(-35px) translateY(-8px);
+  transform: translateX(-30px);
 }
 
-.fa-cart-shopping {
+.la-shopping-cart {
   color: rgb(49, 51, 0);
-  font-size: 1.3em;
-  padding: 0 30px;
+  font-size: 2em;
+  padding: 0 20px;
 }
