@@ -36,7 +36,6 @@ class ProductDetail extends React.Component {
   addToCart = (item) => {
     const items = localStorage.getItem('addedProductsIds');
     const array = JSON.parse(items);
-    console.log(array);
     const existEqual = array.some((e) => e.id === item.id);
     if (!existEqual) {
       const all = {
@@ -58,9 +57,7 @@ class ProductDetail extends React.Component {
   }
 
   getTheProduct = async () => {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
+    const { match: { params: { id } } } = this.props;
     const request = await fetch(`https://api.mercadolibre.com/items/${id}`);
     const response = await request.json();
     this.setState({ item: response, attributes: response.attributes });
@@ -69,7 +66,7 @@ class ProductDetail extends React.Component {
   onInputChange = ({ target }) => {
     this.setState({ [target.name]: target.value });
     if (target.name === 'rate') {
-      const e = document.querySelectorAll('.rate-label');
+      const e = document.querySelectorAll('.rate-star-comment');
       for (let i = 0; i < target.value; i += 1) {
         e[i].firstChild.textContent = '★';
       }
@@ -83,11 +80,7 @@ class ProductDetail extends React.Component {
     const key = `comments-${id}`;
     const atual = localStorage.getItem(key);
     const { commentEmail, rate, comment } = this.state;
-    const objComment = {
-      commentEmail,
-      rate,
-      comment,
-    };
+    const objComment = { commentEmail, rate, comment };
     if (atual === null) {
       localStorage.setItem(key, JSON.stringify([objComment]));
     } else {
@@ -146,74 +139,101 @@ class ProductDetail extends React.Component {
               >
                 { `Estoque: ${item.available_quantity}` }
               </p>
+              { item.shipping !== undefined && item.shipping.free_shipping && (
+                <p data-testid="free-shipping" className="free">
+                  <i className="fa-solid fa-truck-fast" />
+                  {' Frete Grátis'}
+                </p>
+              ) }
+              <button
+                type="button"
+                data-testid="product-detail-add-to-cart"
+                onClick={ () => this.addToCart(item) }
+                disabled={ this.exist(item) }
+                className="add-to-cart-detail las la-cart-plus"
+              >
+                { ' ' }
+              </button>
             </div>
           </section>
-          <button
-            type="button"
-            data-testid="product-detail-add-to-cart"
-            onClick={ () => this.addToCart(item) }
-            disabled={ this.exist(item) }
-            className="add-to-cart-detail"
-          >
-            <i className="las la-cart-plus" />
-          </button>
         </section>
-        { attributes.map((att, index) => (
-          <p key={ index }>{ `${att.name}:: ${att.value_name}` }</p>
-        )) }
-        <p>{ `Estoque: ${item.available_quantity}` }</p>
+        <h3 className="title-create-avaliation">Informações Técnicas</h3>
+        <section className="atributes">
+          { attributes.map((att, index) => (
+            <p key={ index } className="att">
+              { `${att.name}: ` }
+              <span className="att-value">{att.value_name}</span>
+            </p>
+          )) }
+        </section>
+        <h3 className="title-create-avaliation">Deixe sua avaliação</h3>
         <form action="get" className="comment-form">
-          <Input
-            type="email"
-            name="commentEmail"
-            id="commentEmail"
-            value={ commentEmail }
-            onInputChange={ this.onInputChange }
-            datatest="product-detail-email"
-            labelText="Email"
-          />
-          <div className="rate">
-            {rates.map((e) => (
-              <Input
-                key={ e.n }
-                type="radio"
-                name="rate"
-                id={ e.n }
-                value={ e.n }
-                onInputChange={ this.onInputChange }
-                datatest={ `${e.n}-rating` }
-                labelText="☆"
-                className="rate-input"
-                labelClass="rate-label"
-              />
-            ))}
-          </div>
-          <label htmlFor="comment">
-            <textarea
-              id="comment"
-              name="comment"
-              onChange={ this.onInputChange }
-              value={ comment }
-              data-testid="product-detail-evaluation"
+          <div className="create-avaliation">
+            <Input
+              type="email"
+              name="commentEmail"
+              id="commentEmail"
+              value={ commentEmail }
+              onInputChange={ this.onInputChange }
+              datatest="product-detail-email"
+              className="commentEmail"
+              labelText="Email: "
+              labelClass="label-commentEmail"
             />
-          </label>
-          <button
-            type="button"
-            onClick={ () => this.addComment(item.id) }
-            data-testid="submit-review-btn"
-            disabled={ rate === 0 || commentEmail.length === 0 }
-          >
-            Enviar
-          </button>
+            <div className="rate">
+              {rates.map((e) => (
+                <Input
+                  key={ e.n }
+                  type="radio"
+                  name="rate"
+                  id={ e.n }
+                  value={ e.n }
+                  onInputChange={ this.onInputChange }
+                  datatest={ `${e.n}-rating` }
+                  labelText="☆"
+                  className="rate-input"
+                  labelClass="rate-star rate-star-comment"
+                />
+              ))}
+            </div>
+            <label htmlFor="comment" className="label-comment">
+              { 'Comentário: ' }
+              <textarea
+                id="comment"
+                name="comment"
+                onChange={ this.onInputChange }
+                value={ comment }
+                data-testid="product-detail-evaluation"
+                className="comment"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={ () => this.addComment(item.id) }
+              data-testid="submit-review-btn"
+              disabled={ rate === 0 || commentEmail.length === 0 }
+              className="submit-review-btn"
+            >
+              Enviar
+            </button>
+          </div>
+          <img src="https://img.freepik.com/vetores-gratis/cliente-feliz-feedback-do-usuario-rever-o-estilo-de-ilustracao-do-conceito_106788-1100.jpg" alt="ilustration-rate" className="ilustration-rate" />
         </form>
-        {comments.map((e, i) => (
-          <Comment
-            key={ i }
-            commentEmail={ e.commentEmail }
-            rate={ e.rate }
-            comment={ e.comment }
-          />
-        ))}
+        <section className="atual-rates">
+          <h3 className="title-all-avaliations">
+            Todas as avaliações (
+            { comments.length }
+            )
+          </h3>
+          {comments.map((e, i) => (
+            <Comment
+              key={ i }
+              commentEmail={ e.commentEmail }
+              rate={ e.rate }
+              comment={ e.comment }
+            />
+          ))}
+        </section>
       </section>
     );
   }

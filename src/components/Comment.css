@@ -1,0 +1,34 @@
+@keyframes left {
+
+  0% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: translateX(0);
+  }
+}
+
+.comment-container {
+  animation: left 1s;
+  box-shadow: 0 0 5px silver;
+  margin: 10px 20px;
+  padding: 10px 20px;
+}
+
+.rate-email {
+  font-size: 0.8em;
+  margin: 10px 0;
+}
+
+.star-avaliation {
+  margin: 0 0 10px;
+}
+
+.rate-comment {
+  font-style: italic;
+  font-weight: 100;
+  margin: 0 0 10px;
+}
