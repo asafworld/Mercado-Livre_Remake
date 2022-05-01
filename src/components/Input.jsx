@@ -12,9 +12,10 @@ class Input extends Component {
       onInputChange,
       name,
       labelText,
-      placeholder } = this.props;
+      placeholder,
+      labelClass } = this.props;
     return (
-      <label htmlFor={ id }>
+      <label htmlFor={ id } className={ labelClass }>
         { labelText }
         <input
           name={ name }
@@ -41,11 +42,13 @@ Input.propTypes = {
   onInputChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   labelText: PropTypes.string.isRequired,
+  labelClass: PropTypes.string,
 };
 
 Input.defaultProps = {
   className: '',
   placeholder: '',
+  labelClass: '',
 };
 
 export default Input;
