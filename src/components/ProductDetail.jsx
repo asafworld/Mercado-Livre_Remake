@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import Comment from './Comment';
+import Input from './Input';
+import priceFormat from '../services/priceFormat';
 
 class ProductDetail extends React.Component {
   constructor() {
@@ -13,8 +15,8 @@ class ProductDetail extends React.Component {
       rate: 0,
       comment: '',
       comments: [],
+      sum: 0,
     };
-    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
@@ -25,30 +27,32 @@ class ProductDetail extends React.Component {
     if (atual !== null) {
       const atualParse = JSON.parse(atual);
       this.setState({ comments: atualParse });
-      console.log('ok');
     }
+    const getProducts = localStorage.getItem('addedProductsIds');
+    this.sum(JSON.parse(getProducts));
   }
 
-  addToCart = (id, itemProp) => {
+  addToCart = (item) => {
     const items = localStorage.getItem('addedProductsIds');
     const array = JSON.parse(items);
-    const equalId = array.filter((item) => item.id === id);
-    if (equalId.length > 0) {
-      console.log('exist');
-      array.forEach((item, index) => {
-        if (item.id === id) {
-          const { qntd } = item;
-          array[index].qntd = (qntd + 1);
+    console.log(array);
+    const existEqual = array.some((e) => e.id === item.id);
+    if (!existEqual) {
+      const all = {
+        ...item,
+        qntd: 1,
+      };
+      localStorage.setItem('addedProductsIds', JSON.stringify([...array, all]));
+      this.sum([...array, all]);
+    } else {
+      const same = array.find((e) => e.id === item.id);
+      array.forEach((e) => {
+        if (e.id === same.id) {
+          e.qntd += 1;
         }
       });
-      console.log(array);
       localStorage.setItem('addedProductsIds', JSON.stringify(array));
-    } else {
-      localStorage.setItem('addedProductsIds', JSON.stringify([...array, {
-        id,
-        qntd: 1,
-        obj: itemProp,
-      }]));
+      this.sum(array);
     }
   }
 
@@ -58,7 +62,6 @@ class ProductDetail extends React.Component {
     const { id } = params;
     const request = await fetch(`https://api.mercadolibre.com/items/${id}`);
     const response = await request.json();
-    console.log(response);
     this.setState({ productInfo: response, attributes: response.attributes });
   }
 
@@ -89,92 +92,70 @@ class ProductDetail extends React.Component {
     ));
   }
 
+  sum = (items) => {
+    let sum = 0;
+    items.forEach((e) => {
+      sum += e.qntd;
+    });
+    this.setState({ sum });
+  }
+
+  exist = (item) => {
+    const getProducts = localStorage.getItem('addedProductsIds');
+    const products = JSON.parse(getProducts);
+    const same = products.find((e) => e.id === item.id);
+    if (same !== undefined) {
+      return same.qntd === item.available_quantity;
+    }
+    return false;
+  }
+
   render() {
-    const { productInfo, attributes, commentEmail, comment, comments, rate } = this.state;
+    const {
+      productInfo, attributes, commentEmail, comment, comments, rate, sum } = this.state;
+    const rates = [{ n: '1' }, { n: '2' }, { n: '3' }, { n: '4' }, { n: '5' }];
     return (
       <section>
-        <Header />
+        <Header sum={ sum } />
         <div key={ productInfo.title }>
           <p data-testid="product-detail-name">{ productInfo.title }</p>
           <img src={ productInfo.thumbnail } alt={ productInfo.name } />
-          <p>{ productInfo.price }</p>
+          <p>{ priceFormat(productInfo.price) }</p>
         </div>
         { attributes.map((att, index) => (
           <p key={ index }>{ `${att.name}:: ${att.value_name}` }</p>
         )) }
+        <p>{ `Estoque: ${productInfo.available_quantity}` }</p>
         <button
           type="button"
-          onClick={ () => this.addToCart(productInfo.id, productInfo) }
+          onClick={ () => this.addToCart(productInfo) }
           data-testid="product-detail-add-to-cart"
+          disabled={ this.exist(productInfo) }
         >
           <i className="fa-solid fa-cart-plus" />
         </button>
         <form action="get">
-          <label htmlFor="comment-email">
-            <input
-              type="email"
-              id="comment-email"
-              name="commentEmail"
-              value={ commentEmail }
-              onChange={ this.onInputChange }
-              data-testid="product-detail-email"
-            />
-          </label>
-          <label htmlFor="1">
-            <input
+          <Input
+            type="email"
+            name="commentEmail"
+            id="commentEmail"
+            value={ commentEmail }
+            onInputChange={ this.onInputChange }
+            datatest="product-detail-email"
+            labelText="Email"
+          />
+          {rates.map((e) => (
+            <Input
+              key={ e.n }
               type="radio"
               name="rate"
-              id="1"
-              value={ 1 }
-              onChange={ this.onInputChange }
-              data-testid="1-rating"
+              id={ e.n }
+              value={ e.n }
+              onInputChange={ this.onInputChange }
+              datatest={ `${e.n}-rating` }
+              labelText={ e.n }
             />
-            1
-          </label>
-          <label htmlFor="2">
-            <input
-              type="radio"
-              name="rate"
-              id="2"
-              value={ 2 }
-              onChange={ this.onInputChange }
-              data-testid="2-rating"
-            />
-            2
-          </label>
-          <label htmlFor="3">
-            <input
-              type="radio"
-              name="rate"
-              id="3"
-              value={ 3 }
-              onChange={ this.onInputChange }
-              data-testid="3-rating"
-            />
-            3
-          </label>
-          <label htmlFor="4">
-            <input
-              type="radio"
-              name="rate"
-              id="4"
-              value={ 4 }
-              onChange={ this.onInputChange }
-              data-testid="4-rating"
-            />
-            4
-          </label>
-          <label htmlFor="5">
-            <input
-              type="radio"
-              name="rate"
-              id="5"
-              value={ 5 }
-              onChange={ this.onInputChange }
-              data-testid="5-rating"
-            />
-            5
-          </label>
+          ))}
           <label htmlFor="comment">
             <textarea
               id="comment"
