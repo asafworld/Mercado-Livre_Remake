@@ -135,18 +135,13 @@ class Home extends React.Component {
           </aside>
           <section className="cards-container">
             { results.map((item) => (
-              <section key={ item.id } className="card">
+              <section key={ item.id } className="card-container">
                 <Link to={ `/product/${item.id}` } data-testid="product-detail-link">
                   <section
                     data-testid="product"
+                    className="card"
                   >
                     <img className="img-card" src={ item.thumbnail } alt={ item.title } />
-                    { item.shipping.free_shipping && (
-                      <p data-testid="free-shipping" className="free">
-                        <i className="fa-solid fa-truck-fast" />
-                        {' Frete Grátis'}
-                      </p>
-                    ) }
                     <div className="product-info">
                       <p
                         data-testid="product-detail-name"
@@ -154,12 +149,19 @@ class Home extends React.Component {
                       >
                         { item.title }
                       </p>
+                      { console.log(item) }
                       <p className="price-card">{ priceFormat(item.price)}</p>
                       <p
                         className="stock-card"
                       >
                         { `Estoque: ${item.available_quantity}` }
                       </p>
+                      { item.shipping.free_shipping && (
+                        <p data-testid="free-shipping" className="free">
+                          <i className="fa-solid fa-truck-fast" />
+                          {' Frete Grátis'}
+                        </p>
+                      ) }
                     </div>
                   </section>
                 </Link>
@@ -170,7 +172,7 @@ class Home extends React.Component {
                   disabled={ this.exist(item) }
                   className="add-to-cart"
                 >
-                  <i className="fa-solid fa-cart-plus" />
+                  <i className="las la-cart-plus" />
                 </button>
               </section>
             )) }
