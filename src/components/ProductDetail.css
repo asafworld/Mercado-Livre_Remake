@@ -1,25 +1,162 @@
+@keyframes bottom2 {
+
+  0% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: translateY(0);
+  }
+}
+
+@keyframes left {
+
+  0% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: translateX(0);
+  }
+}
+
 .card-container-detail {
-  margin: auto;
+  animation: bottom2 1s;
+  margin: 20px auto;
+  padding: 50px;
+  width: 700px;
 }
 
 .comment-form {
-  align-items: center;
+  animation: left 1s;
   display: flex;
-  flex-direction: column;
+  height: 300px;
+  justify-content: space-between;
   margin: auto;
-  padding: 10px;
-  width: 500px;
+  padding: 20px;
 }
 
 .comment-textarea {
   width: 100%;
 }
 
-.rate-label {
-  color: yellow;
-  font-size: 1.3em;
+.rate-star {
+  color: rgb(238, 238, 48);
+  font-size: 1.4em;
 }
 
 .rate-input {
   all: inherit;
+}
+
+.atual-rates {
+  border-top: 1px solid silver;
+}
+
+.rate-star-comment {
+  cursor: pointer;
+}
+
+.ilustration-rate {
+  height: 100%;
+}
+
+.title-create-avaliation {
+  border-top: 1px solid silver;
+  color: rgb(68, 68, 68);
+  font-weight: 500;
+  padding: 10px;
+  width: 100%;
+}
+
+.create-avaliation {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment {
+  background-color: whitesmoke;
+  border: 0;
+  border-left: 3px solid rgb(231, 231, 231);
+  box-shadow: none;
+  height: 80px;
+  margin: 10px 0;
+  outline: 0;
+  padding: 5px;
+  resize: none;
+  width: 100%;
+}
+
+.commentEmail {
+  background-color: whitesmoke;
+  border: 0;
+  border-left: 3px solid rgb(231, 231, 231);
+  box-shadow: none;
+  height: 25px;
+  margin: 10px 0;
+  outline: 0;
+  padding: 5px;
+  width: 100%;
+}
+
+.label-commentEmail, .label-comment {
+  font-size: 0.8em;
+  font-weight: 100;
+}
+
+.rate {
+  margin: 0 0 10px;
+}
+
+.submit-review-btn {
+  background-color: rgb(52, 131, 250);
+  border: 0;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  width: 100px;
+}
+
+.submit-review-btn:disabled {
+  background-color: rgb(209, 209, 209);
+  cursor: not-allowed;
+}
+
+.title-all-avaliations {
+  color: rgb(68, 68, 68);
+  font-weight: 500;
+  padding: 10px;
+  width: 100%;
+}
+
+.att {
+  font-size: 0.8em;
+  padding: 10px;
+}
+
+.att-value {
+  font-weight: 100;
+}
+
+.atributes {
+  animation: left 1s;
+  padding: 20px;
+}
+
+.add-to-cart-detail {
+  background-color: transparent;
+  border: 0;
+  color: rgb(52, 131, 250);
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.add-to-cart-detail:disabled {
+  color: rgb(219, 219, 219);
+  cursor: not-allowed;
 }

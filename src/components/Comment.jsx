@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './Comment.css';
 
 class Comment extends Component {
   createStars = (rate) => {
@@ -18,11 +19,16 @@ class Comment extends Component {
 
   render() {
     const { commentEmail, comment, rate } = this.props;
+    const quote = '"';
     return (
-      <section>
-        <p>{ commentEmail }</p>
-        <p>{ this.createStars(rate) }</p>
-        <p>{ comment }</p>
+      <section className="comment-container">
+        <p className="rate-email">{ commentEmail }</p>
+        <p className="rate-star star-avaliation">{ this.createStars(rate) }</p>
+        <p className="rate-comment">
+          {comment.length > 0 && <span>{quote}</span>}
+          { comment }
+          {comment.length > 0 && <span>{quote}</span>}
+        </p>
       </section>
     );
   }
