@@ -4,12 +4,13 @@ import Header from './Header';
 import Comment from './Comment';
 import Input from './Input';
 import priceFormat from '../services/priceFormat';
+import './ProductDetail.css';
 
 class ProductDetail extends React.Component {
   constructor() {
     super();
     this.state = {
-      productInfo: {},
+      item: {},
       attributes: [],
       commentEmail: '',
       rate: 0,
@@ -62,11 +63,20 @@ class ProductDetail extends React.Component {
     const { id } = params;
     const request = await fetch(`https://api.mercadolibre.com/items/${id}`);
     const response = await request.json();
-    this.setState({ productInfo: response, attributes: response.attributes });
+    this.setState({ item: response, attributes: response.attributes });
   }
 
   onInputChange = ({ target }) => {
     this.setState({ [target.name]: target.value });
+    if (target.name === 'rate') {
+      const e = document.querySelectorAll('.rate-label');
+      for (let i = 0; i < target.value; i += 1) {
+        e[i].firstChild.textContent = '★';
+      }
+      for (let i = e.length - 1; i >= target.value; i -= 1) {
+        e[i].firstChild.textContent = '☆';
+      }
+    }
   }
 
   addComment = (id) => {
@@ -112,29 +122,47 @@ class ProductDetail extends React.Component {
 
   render() {
     const {
-      productInfo, attributes, commentEmail, comment, comments, rate, sum } = this.state;
+      item, attributes, commentEmail, comment, comments, rate, sum } = this.state;
     const rates = [{ n: '1' }, { n: '2' }, { n: '3' }, { n: '4' }, { n: '5' }];
     return (
       <section>
         <Header sum={ sum } />
-        <div key={ productInfo.title }>
-          <p data-testid="product-detail-name">{ productInfo.title }</p>
-          <img src={ productInfo.thumbnail } alt={ productInfo.name } />
-          <p>{ priceFormat(productInfo.price) }</p>
-        </div>
+        <section key={ item.id } className="card-container-detail">
+          <section
+            data-testid="product"
+            className="card"
+          >
+            <img className="img-card" src={ item.thumbnail } alt={ item.title } />
+            <div className="product-info">
+              <p
+                data-testid="product-detail-name"
+                className="name-card"
+              >
+                { item.title }
+              </p>
+              <p className="price-card">{ priceFormat(item.price)}</p>
+              <p
+                className="stock-card"
+              >
+                { `Estoque: ${item.available_quantity}` }
+              </p>
+            </div>
+          </section>
+          <button
+            type="button"
+            data-testid="product-detail-add-to-cart"
+            onClick={ () => this.addToCart(item) }
+            disabled={ this.exist(item) }
+            className="add-to-cart-detail"
+          >
+            <i className="las la-cart-plus" />
+          </button>
+        </section>
         { attributes.map((att, index) => (
           <p key={ index }>{ `${att.name}:: ${att.value_name}` }</p>
         )) }
-        <p>{ `Estoque: ${productInfo.available_quantity}` }</p>
-        <button
-          type="button"
-          onClick={ () => this.addToCart(productInfo) }
-          data-testid="product-detail-add-to-cart"
-          disabled={ this.exist(productInfo) }
-        >
-          <i className="fa-solid fa-cart-plus" />
-        </button>
-        <form action="get">
+        <p>{ `Estoque: ${item.available_quantity}` }</p>
+        <form action="get" className="comment-form">
           <Input
             type="email"
             name="commentEmail"
@@ -144,18 +172,22 @@ class ProductDetail extends React.Component {
             datatest="product-detail-email"
             labelText="Email"
           />
-          {rates.map((e) => (
-            <Input
-              key={ e.n }
-              type="radio"
-              name="rate"
-              id={ e.n }
-              value={ e.n }
-              onInputChange={ this.onInputChange }
-              datatest={ `${e.n}-rating` }
-              labelText={ e.n }
-            />
-          ))}
+          <div className="rate">
+            {rates.map((e) => (
+              <Input
+                key={ e.n }
+                type="radio"
+                name="rate"
+                id={ e.n }
+                value={ e.n }
+                onInputChange={ this.onInputChange }
+                datatest={ `${e.n}-rating` }
+                labelText="☆"
+                className="rate-input"
+                labelClass="rate-label"
+              />
+            ))}
+          </div>
           <label htmlFor="comment">
             <textarea
               id="comment"
@@ -167,7 +199,7 @@ class ProductDetail extends React.Component {
           </label>
           <button
             type="button"
-            onClick={ () => this.addComment(productInfo.id) }
+            onClick={ () => this.addComment(item.id) }
             data-testid="submit-review-btn"
             disabled={ rate === 0 || commentEmail.length === 0 }
           >
