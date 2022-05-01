@@ -1,5 +1,18 @@
-.link-cart-container {
+header nav {
+  align-items: center;
+  background-color: rgb(255, 241, 89);
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
   padding: 10px;
+}
+
+.logo {
+  width: 125px;
+}
+
+header h1 {
+  color: rgb(73, 73, 73);
 }
 
 a {
@@ -7,10 +20,18 @@ a {
 }
 
 .counter-items {
+  background-color: red;
+  border-radius: 25px;
+  color: white;
+  font-size: 0.6em;
+  font-weight: 500;
+  padding: 2px 5px;
   position: absolute;
-  transform: translateX(5px) translateY(-5px);
+  transform: translateX(-35px) translateY(-8px);
 }
 
 .fa-cart-shopping {
+  color: rgb(49, 51, 0);
   font-size: 1.3em;
+  padding: 0 30px;
 }

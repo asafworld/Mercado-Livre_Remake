@@ -35,9 +35,10 @@ class Category extends Component {
             name="category"
             value={ categoria.id }
             id={ categoria.id }
+            className="category"
             onChange={ this.onInputChange }
           />
-          {categoria.name}
+          <span>{categoria.name}</span>
         </label>))
     );
   }

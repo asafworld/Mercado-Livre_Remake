@@ -11,7 +11,8 @@ class Input extends Component {
       className,
       onInputChange,
       name,
-      labelText } = this.props;
+      labelText,
+      placeholder } = this.props;
     return (
       <label htmlFor={ id }>
         { labelText }
@@ -23,6 +24,7 @@ class Input extends Component {
           className={ className }
           onChange={ onInputChange }
           data-testid={ datatest }
+          placeholder={ placeholder }
         />
       </label>
     );
@@ -35,6 +37,7 @@ Input.propTypes = {
   value: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   className: PropTypes.string,
+  placeholder: PropTypes.string,
   onInputChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   labelText: PropTypes.string.isRequired,
@@ -42,6 +45,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
   className: '',
+  placeholder: '',
 };
 
 export default Input;
