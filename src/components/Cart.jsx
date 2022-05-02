@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import priceFormat from '../services/priceFormat';
 import './Cart.css';
+import NoItems from './NoItems';
 
 class Cart extends Component {
   constructor() {
@@ -94,7 +95,7 @@ class Cart extends Component {
         </header>
         <main className="cart">
           { products.length === 0
-            ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p> : (
+            ? <NoItems /> : (
               products.map((item) => (
                 <section key={ item.id } className="card-container">
                   <section
@@ -137,7 +138,13 @@ class Cart extends Component {
                         >
                           -
                         </button>
-                        <p data-testid="shopping-cart-product-quantity">{ item.qntd }</p>
+                        <p
+                          data-testid="shopping-cart-product-quantity"
+                          className="shopping-cart-product-quantity"
+                        >
+                          { item.qntd }
+
+                        </p>
                         <button
                           type="button"
                           onClick={ () => this.plusOne(item) }

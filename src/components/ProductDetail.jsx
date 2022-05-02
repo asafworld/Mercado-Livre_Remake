@@ -64,15 +64,12 @@ class ProductDetail extends React.Component {
   }
 
   onInputChange = ({ target }) => {
-    this.setState({ [target.name]: target.value });
-    if (target.name === 'rate') {
+    const { name, value } = target;
+    this.setState({ [name]: value });
+    if (name === 'rate') {
       const e = document.querySelectorAll('.rate-star-comment');
-      for (let i = 0; i < target.value; i += 1) {
-        e[i].firstChild.textContent = '★';
-      }
-      for (let i = e.length - 1; i >= target.value; i -= 1) {
-        e[i].firstChild.textContent = '☆';
-      }
+      for (let i = 0; i < value; i += 1) e[i].firstChild.textContent = '★';
+      for (let i = e.length - 1; i >= value; i -= 1) e[i].firstChild.textContent = '☆';
     }
   }
 
@@ -97,9 +94,7 @@ class ProductDetail extends React.Component {
 
   sum = (items) => {
     let sum = 0;
-    items.forEach((e) => {
-      sum += e.qntd;
-    });
+    items.forEach((e) => { sum += e.qntd; });
     this.setState({ sum });
   }
 
@@ -110,7 +105,6 @@ class ProductDetail extends React.Component {
     if (same !== undefined) {
       return same.qntd === item.available_quantity;
     }
-    return false;
   }
 
   render() {
@@ -134,11 +128,7 @@ class ProductDetail extends React.Component {
                 { item.title }
               </p>
               <p className="price-card">{ priceFormat(item.price)}</p>
-              <p
-                className="stock-card"
-              >
-                { `Estoque: ${item.available_quantity}` }
-              </p>
+              <p className="stock-card">{ `Estoque: ${item.available_quantity}` }</p>
               { item.shipping !== undefined && item.shipping.free_shipping && (
                 <p data-testid="free-shipping" className="free">
                   <i className="fa-solid fa-truck-fast" />
@@ -150,9 +140,9 @@ class ProductDetail extends React.Component {
                 data-testid="product-detail-add-to-cart"
                 onClick={ () => this.addToCart(item) }
                 disabled={ this.exist(item) }
-                className="add-to-cart-detail las la-cart-plus"
+                className="add-to-cart-detail"
               >
-                { ' ' }
+                Adicionar carrinho
               </button>
             </div>
           </section>
