@@ -85,12 +85,12 @@ main {
 
 .card-container {
   align-items: center;
-  animation: bottom 1s;
+  animation: left 1s;
   background-color: rgb(253, 253, 253);
   border-top: 1px solid silver;
   display: flex;
   justify-content: space-between;
-  margin: 10px;
+  margin: 10px auto;
   padding: 10px;
   width: 85%;
 }
