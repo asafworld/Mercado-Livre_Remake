@@ -149,14 +149,27 @@
 }
 
 .add-to-cart-detail {
-  background-color: transparent;
+  background-color: rgb(52, 131, 250);
   border: 0;
-  color: rgb(52, 131, 250);
+  color: white;
   cursor: pointer;
-  font-size: 1.5em;
+  font-size: 0.8em;
+  font-weight: 100;
+  margin: 5px 0;
+  padding: 5px;
 }
 
 .add-to-cart-detail:disabled {
-  color: rgb(219, 219, 219);
+  background-color: rgb(219, 219, 219);
   cursor: not-allowed;
+}
+
+.add-to-cart-detail:active {
+  font-size: 0.7em;
+  margin: 8px 2px;
+  padding: 5px;
+}
+
+.add-to-cart-detail:hover {
+  opacity: 80%;
 }

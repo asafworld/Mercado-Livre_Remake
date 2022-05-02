@@ -60,10 +60,10 @@
   align-items: center;
   background-color: rgb(255, 241, 89);
   border: 2px solid rgb(255, 241, 89);
+  bottom: 0;
   display: flex;
   justify-content: space-between;
   position: fixed;
-  bottom: 0;
   width: 100%;
 }
 
@@ -81,4 +81,9 @@
   font-weight: 100;
   height: 100%;
   padding: 15px 20px;
+}
+
+.shopping-cart-product-quantity {
+  font-size: 0.8em;
+  font-weight: 100;
 }
