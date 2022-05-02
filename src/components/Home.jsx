@@ -126,7 +126,7 @@ class Home extends React.Component {
             </button>
           </section>
         </section>
-        <main>
+        <main className="home">
           <aside className="search">
             <Category
               onCategoryChange={ this.onCategoryChange }
