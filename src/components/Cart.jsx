@@ -92,73 +92,75 @@ class Cart extends Component {
             </Link>
           </nav>
         </header>
-        { products.length === 0
-          ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p> : (
-            products.map((item) => (
-              <section key={ item.id } className="card-container">
-                <section
-                  data-testid="product"
-                  className="card"
-                >
-                  <img className="img-card" src={ item.thumbnail } alt={ item.title } />
-                  <div className="product-info">
-                    <Link to={ `/product/${item.id}` }>
-                      <p
-                        data-testid="shopping-cart-product-name"
-                        className="name-card"
-                      >
-                        { item.title }
-                      </p>
-                    </Link>
-                    <p
-                      className="price-card"
-                    >
-                      { priceFormat((item.price * item.qntd))}
-                    </p>
-                    <p
-                      className="stock-card"
-                    >
-                      { `Estoque: ${item.available_quantity}` }
-                    </p>
-                    { item.shipping.free_shipping && (
-                      <p data-testid="free-shipping" className="free">
-                        <i className="fa-solid fa-truck-fast" />
-                        {' Frete Grátis'}
-                      </p>
-                    ) }
-                    <div className="control-cart">
-                      <button
-                        type="button"
-                        onClick={ () => this.minusOne(item) }
-                        data-testid="product-decrease-quantity"
-                        disabled={ item.qntd === 1 }
-                        className="more-less-cart less"
-                      >
-                        -
-                      </button>
-                      <p data-testid="shopping-cart-product-quantity">{ item.qntd }</p>
-                      <button
-                        type="button"
-                        onClick={ () => this.plusOne(item) }
-                        data-testid="product-increase-quantity"
-                        disabled={ this.exist(item) }
-                        className="more-less-cart more"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={ () => this.remove(item) }
-                    className="delete-cart"
+        <main className="cart">
+          { products.length === 0
+            ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p> : (
+              products.map((item) => (
+                <section key={ item.id } className="card-container">
+                  <section
+                    data-testid="product"
+                    className="card"
                   >
-                    ⨉
-                  </button>
+                    <img className="img-card" src={ item.thumbnail } alt={ item.title } />
+                    <div className="product-info">
+                      <Link to={ `/product/${item.id}` }>
+                        <p
+                          data-testid="shopping-cart-product-name"
+                          className="name-card"
+                        >
+                          { item.title }
+                        </p>
+                      </Link>
+                      <p
+                        className="price-card"
+                      >
+                        { priceFormat((item.price * item.qntd))}
+                      </p>
+                      <p
+                        className="stock-card"
+                      >
+                        { `Estoque: ${item.available_quantity}` }
+                      </p>
+                      { item.shipping.free_shipping && (
+                        <p data-testid="free-shipping" className="free">
+                          <i className="fa-solid fa-truck-fast" />
+                          {' Frete Grátis'}
+                        </p>
+                      ) }
+                      <div className="control-cart">
+                        <button
+                          type="button"
+                          onClick={ () => this.minusOne(item) }
+                          data-testid="product-decrease-quantity"
+                          disabled={ item.qntd === 1 }
+                          className="more-less-cart less"
+                        >
+                          -
+                        </button>
+                        <p data-testid="shopping-cart-product-quantity">{ item.qntd }</p>
+                        <button
+                          type="button"
+                          onClick={ () => this.plusOne(item) }
+                          data-testid="product-increase-quantity"
+                          disabled={ this.exist(item) }
+                          className="more-less-cart more"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={ () => this.remove(item) }
+                      className="delete-cart"
+                    >
+                      ⨉
+                    </button>
+                  </section>
                 </section>
-              </section>
-            ))
-          ) }
+              ))
+            ) }
+        </main>
         <footer className="footer-cart">
           <p className="total">
             Total:
