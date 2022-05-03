@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from './Header';
 import Input from './Input';
 import priceFormat from '../services/priceFormat';
+import './Checkout.css';
 
 class Checkout extends Component {
   constructor() {
@@ -49,24 +51,57 @@ class Checkout extends Component {
     return (
       <>
         <Header sum={ sum } />
-        <main>
-          <section>
-            <p>Revise seus produtos</p>
-            {products.map((e, i) => (
-              <section key={ i }>
-                <img src={ e.thumbnail } alt={ e.title } />
-                <p>{ e.title }</p>
-                <p>{ e.qntd }</p>
-                <p>{ priceFormat(e.price * e.qntd) }</p>
+        <h3 className="checkout-title ">Revise seus produtos</h3>
+        <main className="checkout">
+          <section className="checkout-products">
+            {products.map((item) => (
+              <section key={ item.id } className="card-container">
+                <section
+                  data-testid="product"
+                  className="card"
+                >
+                  <img className="img-card" src={ item.thumbnail } alt={ item.title } />
+                  <div className="product-info">
+                    <Link to={ `/product/${item.id}` }>
+                      <p
+                        data-testid="shopping-cart-product-name"
+                        className="name-card"
+                      >
+                        { item.title }
+                      </p>
+                    </Link>
+                    <p
+                      className="price-card"
+                    >
+                      { priceFormat((item.price * item.qntd))}
+                    </p>
+                    { item.shipping.free_shipping && (
+                      <p data-testid="free-shipping" className="free">
+                        <i className="fa-solid fa-truck-fast" />
+                        {' Frete Grátis'}
+                      </p>
+                    ) }
+                    <div className="control-cart">
+                      <p
+                        data-testid="shopping-cart-product-quantity"
+                        className="shopping-cart-product-quantity"
+                      >
+                        { item.qntd }
+
+                      </p>
+
+                    </div>
+                  </div>
+                </section>
               </section>
             ))}
-            <p>
-              Total:
-              {' '}
-              <span>{ priceFormat(totalPrice) }</span>
-            </p>
           </section>
-          <section>
+          <p>
+            Total:
+            {' '}
+            <span>{ priceFormat(totalPrice) }</span>
+          </p>
+          <section className="form-checkout">
             <p>Informações pessoais</p>
             <form action="get">
               <Input

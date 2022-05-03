@@ -1,0 +1,16 @@
+.checkout {
+  background-color: white;
+  box-shadow: 0 0 5px silver;
+  display: flex;
+  flex-direction: column;
+  margin: 50px auto;
+  padding: 10px;
+  width: 80%;
+}
+
+.checkout-title {
+  color: rgb(68, 68, 68);
+  font-weight: 500;
+  padding: 10px;
+  width: 100%;
+}
